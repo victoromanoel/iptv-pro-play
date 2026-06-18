@@ -1,0 +1,690 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="https://d16ilfvy4mv02r.cloudfront.net/workspaces/4HAAaAjn0tJiV2jVRCIFGiqXrgHHeKjl/ba3f4bd1-6935-4163-b17c-4eea8dafcecb/files/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎬 IPTV Pro Player</title>
+<style>
+:root{--bg:#08080f;--surface:#111118;--card:#181825;--border:#252535;--accent:#7c3aed;--accent2:#a855f7;--text:#e2e8f0;--muted:#6b7280;--danger:#ef4444;--success:#22c55e;--warning:#f59e0b;--r:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(8,8,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 16px;height:58px}
+.logo{font-size:20px;font-weight:900;background:linear-gradient(135deg,#7c3aed,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;user-select:none}
+.search-box{flex:1;max-width:420px;position:relative}
+.search-box input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:24px;padding:8px 40px 8px 16px;color:var(--text);font-size:13px;outline:none;transition:border-color .2s}
+.search-box input:focus{border-color:var(--accent)}
+.search-box span{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none}
+.ml{margin-left:auto}
+.badge-safe{background:linear-gradient(135deg,#059669,#047857);color:#fff;border-radius:6px;padding:3px 9px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.btn{padding:7px 13px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-ghost{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent2)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-menu{padding:7px 10px;font-size:18px}
+.layout{display:flex;margin-top:58px;min-height:calc(100vh - 58px)}
+.sidebar{width:215px;min-width:215px;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;transition:margin-left .25s}
+.sidebar.hidden{margin-left:-215px}
+.sb-section{padding:12px 14px 4px;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:700}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--muted);border-left:3px solid transparent;user-select:none}
+.sb-item:hover{background:var(--card);color:var(--text)}
+.sb-item.active{background:rgba(124,58,237,.15);color:var(--accent2);border-left-color:var(--accent)}
+.sb-item .cnt{margin-left:auto;background:var(--border);border-radius:10px;padding:1px 7px;font-size:10px;color:var(--muted)}
+.sb-item.active .cnt{color:var(--accent2)}
+.live-dot{width:7px;height:7px;background:#ef4444;border-radius:50%;animation:blink 1.2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.main{flex:1;overflow-y:auto;padding:18px;min-width:0}
+.section-hdr{font-size:18px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-hdr span{font-size:13px;color:var(--muted);font-weight:400}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;margin-bottom:24px}
+.ch-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s;position:relative}
+.ch-card:hover{transform:translateY(-4px) scale(1.02);border-color:var(--accent);box-shadow:0 8px 28px rgba(124,58,237,.28)}
+.ch-card.live-card{border-color:rgba(239,68,68,.35)}
+.ch-card.live-card:hover{border-color:#ef4444;box-shadow:0 8px 28px rgba(239,68,68,.3)}
+.ch-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,#1e1830,#2a1540);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.ch-thumb img{width:100%;height:100%;object-fit:contain;padding:8px}
+.ch-thumb .icon{font-size:34px}
+.ch-badge{position:absolute;top:5px;right:5px;background:var(--accent);color:#fff;border-radius:5px;padding:2px 6px;font-size:9px;font-weight:700}
+.ch-badge.live{background:#ef4444}
+.ch-info{padding:9px}
+.ch-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch-grp{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero{border-radius:var(--r);background:linear-gradient(135deg,#1a0a3a 0%,#0d1a35 100%);padding:24px;margin-bottom:20px;display:flex;align-items:center;gap:20px;border:1px solid var(--border);flex-wrap:wrap}
+.hero-icon{font-size:52px;flex-shrink:0}
+.hero h1{font-size:22px;font-weight:800;margin-bottom:6px}
+.hero p{color:var(--muted);font-size:13px;margin-bottom:12px}
+.stats-row{display:flex;gap:16px;flex-wrap:wrap}
+.stat-box{text-align:center}
+.stat-val{font-size:20px;font-weight:800;color:var(--accent2)}
+.stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.load-more-wrap{display:flex;justify-content:center;padding:20px 0 30px}
+.ov{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.9);backdrop-filter:blur(10px);align-items:center;justify-content:center}
+.ov.open{display:flex}
+.player-box{background:var(--surface);border-radius:14px;overflow:hidden;width:96vw;max-width:1080px;border:1px solid var(--border);box-shadow:0 30px 80px rgba(0,0,0,.8);display:flex;flex-direction:column;max-height:95vh}
+.ph{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--card);flex-shrink:0}
+.ph-title{flex:1;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pw{position:relative;background:#000;flex-shrink:0}
+.pw video{width:100%;max-height:60vh;display:block}
+.perr{display:none;position:absolute;inset:0;background:rgba(0,0,0,.88);align-items:center;justify-content:center;flex-direction:column;gap:10px;text-align:center;padding:20px}
+.perr.show{display:flex}
+.pf{padding:10px 16px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;background:var(--card);border-top:1px solid var(--border);flex-shrink:0}
+.pstat{font-size:11px;color:var(--muted);margin-left:auto}
+.retry-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;width:180px;margin-top:6px}
+.retry-fill{height:100%;background:var(--accent);transition:width .1s}
+.loading-screen{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.spinner{width:48px;height:48px;border:4px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-bar-wrap{width:260px;background:var(--border);border-radius:4px;height:4px;overflow:hidden;margin-top:4px}
+.load-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .3s}
+.toasts{position:fixed;bottom:18px;right:18px;z-index:1000;display:flex;flex-direction:column;gap:6px}
+.toast{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:12px;display:flex;align-items:center;gap:8px;animation:tin .3s ease;box-shadow:0 6px 20px rgba(0,0,0,.5);max-width:280px}
+.toast.ok{border-color:var(--success)}.toast.err{border-color:var(--danger)}.toast.warn{border-color:var(--warning)}
+@keyframes tin{from{transform:translateX(80px);opacity:0}to{transform:none;opacity:1}}
+@media(max-width:600px){.sidebar{display:none}.grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}.logo{font-size:15px}.hero{flex-direction:column;text-align:center;padding:16px}.stats-row{justify-content:center}}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--surface)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="ls">
+  <div class="spinner"></div>
+  <div style="font-size:17px;font-weight:800">🎬 IPTV Pro Player</div>
+  <div style="font-size:13px;color:var(--muted)" id="lsub">Iniciando...</div>
+  <div class="load-bar-wrap"><div class="load-bar-fill" id="lbar" style="width:0%"></div></div>
+  <div style="font-size:11px;color:var(--muted)" id="lcnt"></div>
+</div>
+
+<div class="topbar">
+  <button class="btn btn-ghost btn-menu" onclick="toggleSidebar()">☰</button>
+  <div class="logo">🎬 IPTV Pro</div>
+  <div class="search-box">
+    <input type="text" id="srch" placeholder="Buscar filmes, séries, canais..." oninput="doSearch(this.value)">
+    <span>🔍</span>
+  </div>
+  <div class="ml" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span class="badge-safe">🛡️ +18 Bloqueado</span>
+    <button class="btn btn-ghost btn-sm" onclick="reloadAll()">🔄 Atualizar</button>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="sb-section">Menu</div>
+    <div class="sb-item active" id="nav-all"    onclick="switchTab('all',this)">🏠 <span>Todos</span><span class="cnt" id="c-all">0</span></div>
+    <div class="sb-item"        id="nav-live24"  onclick="switchTab('live24',this)"><div class="live-dot"></div> <span>Ao Vivo 24h</span><span class="cnt" id="c-live24">0</span></div>
+    <div class="sb-item"        id="nav-tv"      onclick="switchTab('tv',this)">📺 <span>TV ao Vivo</span><span class="cnt" id="c-tv">0</span></div>
+    <div class="sb-item"        id="nav-movies"  onclick="switchTab('movies',this)">🎬 <span>Filmes</span><span class="cnt" id="c-movies">0</span></div>
+    <div class="sb-item"        id="nav-series"  onclick="switchTab('series',this)">🎭 <span>Séries</span><span class="cnt" id="c-series">0</span></div>
+    <div class="sb-item"        id="nav-anime"   onclick="switchTab('anime',this)">⚡ <span>Animes</span><span class="cnt" id="c-anime">0</span></div>
+    <div class="sb-item"        id="nav-kids"    onclick="switchTab('kids',this)">🧸 <span>Infantil</span><span class="cnt" id="c-kids">0</span></div>
+    <div class="sb-item"        id="nav-sport"   onclick="switchTab('sport',this)">⚽ <span>Esportes</span><span class="cnt" id="c-sport">0</span></div>
+    <div class="sb-section" style="margin-top:8px">Categorias</div>
+    <div id="catList"></div>
+  </nav>
+
+  <main class="main" id="main">
+    <div class="hero" id="hero" style="display:none">
+      <div class="hero-icon">🎬</div>
+      <div>
+        <h1>IPTV Pro Player</h1>
+        <p>Lista carregada com canais ao vivo 24h integrados! Conteúdo +18 bloqueado.</p>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-val" id="sv-total">0</div><div class="stat-lbl">Total</div></div>
+          <div class="stat-box"><div class="stat-val" id="sv-live24" style="color:#ef4444">0</div><div class="stat-lbl">🔴 24h</div></div>
+          <div class="stat-box"><div class="stat-val" id="sv-tv">0</div><div class="stat-lbl">TV</div></div>
+          <div class="stat-box"><div class="stat-val" id="sv-movies">0</div><div class="stat-lbl">Filmes</div></div>
+          <div class="stat-box"><div class="stat-val" id="sv-series">0</div><div class="stat-lbl">Séries</div></div>
+          <div class="stat-box"><div class="stat-val" id="sv-blocked" style="color:var(--danger)">0</div><div class="stat-lbl">🛡️ Bloq.</div></div>
+        </div>
+      </div>
+    </div>
+    <div id="content"></div>
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+      <button class="btn btn-accent" onclick="loadMoreCards()" id="loadMoreBtn">⬇️ Carregar mais</button>
+    </div>
+  </main>
+</div>
+
+<div class="ov" id="ov" onclick="bgClose(event)">
+  <div class="player-box">
+    <div class="ph">
+      <button class="btn btn-ghost btn-sm" onclick="closePlayer()">✕ Fechar</button>
+      <div class="ph-title" id="ptitle">—</div>
+      <div style="font-size:11px;color:var(--muted)" id="pretry"></div>
+    </div>
+    <div class="pw">
+      <video id="vid" controls autoplay playsinline crossorigin="anonymous"></video>
+      <div class="perr" id="perr">
+        <div style="font-size:36px">⚠️</div>
+        <div style="font-weight:700;font-size:15px">Erro de reprodução</div>
+        <div style="color:var(--muted);font-size:13px" id="perrmsg">Reconectando automaticamente...</div>
+        <div class="retry-bar"><div class="retry-fill" id="rfill" style="width:0%"></div></div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;justify-content:center">
+          <button class="btn btn-accent" onclick="manualRetry()">🔄 Tentar Novamente</button>
+          <button class="btn btn-ghost" onclick="openVLC()">🎞️ VLC</button>
+        </div>
+      </div>
+    </div>
+    <div class="pf">
+      <span style="font-size:12px;color:var(--muted)">Abrir com:</span>
+      <button class="btn btn-ghost btn-sm" onclick="openVLC()">🎞️ VLC</button>
+      <button class="btn btn-ghost btn-sm" onclick="openMX()">▶️ MX Player</button>
+      <button class="btn btn-ghost btn-sm" onclick="openKodi()">🎮 Kodi</button>
+      <button class="btn btn-ghost btn-sm" onclick="openPot()">🎬 PotPlayer</button>
+      <button class="btn btn-ghost btn-sm" onclick="copyURL()">📋 Copiar URL</button>
+      <span class="pstat" id="pstat">Pronto</span>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+// ═══════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════
+const M3U_URL = 'http://srv.polkafood.pl/get.php?username=NJXpXX&password=QXthsu&type=m3u_plus';
+const CACHE_KEY = 'iptv_channels_v3';
+const CACHE_TS_KEY = 'iptv_ts_v3';
+const CACHE_TTL = 6 * 3600 * 1000;
+const PAGE_SIZE = 60;
+
+const PROXIES = [
+  u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+  u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+  u => `https://thingproxy.freeboard.io/fetch/${u}`,
+];
+
+const ADULT_GROUPS = ['XXX - Adultos','Canais | Adultos'];
+const ADULT_KW = ['xxx','adult','18+','+18','erotic','porn','sex','nude','hentai'];
+
+// ═══════════════════════════════════════
+// CANAIS AO VIVO 24H — INTEGRADOS
+// IDs negativos para não conflitar com M3U
+// ═══════════════════════════════════════
+const LIVE_24H = [
+  // ── BRASIL ──────────────────────────
+  { id:-1,  name:'TV Brasil',      group:'📡 Ao Vivo 24h | Brasil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/TV_Brasil_logo_%282018%29.svg/200px-TV_Brasil_logo_%282018%29.svg.png', url:'https://svr-cdn.sme.df.gov.br/live/smil:tvbrasilia.smil/playlist.m3u8' },
+  { id:-2,  name:'TV Câmara',      group:'📡 Ao Vivo 24h | Brasil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Logo_TV_Camara.svg/200px-Logo_TV_Camara.svg.png', url:'https://velox.camara.leg.br/live/smil:canalcamara.smil/playlist.m3u8' },
+  { id:-3,  name:'TV Senado',      group:'📡 Ao Vivo 24h | Brasil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/TV_Senado.svg/200px-TV_Senado.svg.png', url:'https://sensaosenado.akamaized.net/hls/live/2002144/TVSenado_Live/index.m3u8' },
+  { id:-4,  name:'TV Justiça',     group:'📡 Ao Vivo 24h | Brasil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/TV_Justi%C3%A7a_logo.svg/200px-TV_Justi%C3%A7a_logo.svg.png', url:'https://stf.akamaized.net/hls/live/2005769/tvjustica/index.m3u8' },
+  { id:-5,  name:'TV Cultura SP',  group:'📡 Ao Vivo 24h | Brasil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/TV_Cultura_logo.svg/200px-TV_Cultura_logo.svg.png', url:'https://tvcultura.catraca.uol.com.br/live/hls/tvcultura.m3u8' },
+  { id:-6,  name:'TV Band',        group:'📡 Ao Vivo 24h | Brasil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Band_logo_2014.svg/200px-Band_logo_2014.svg.png', url:'https://mab-band.akamaized.net/out/u/band.mpd' },
+  { id:-7,  name:'Record News',    group:'📡 Ao Vivo 24h | Brasil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Record_News_2016.svg/200px-Record_News_2016.svg.png', url:'https://recordnews.r7.com/ao-vivo' },
+  { id:-8,  name:'CNN Brasil',      group:'📡 Ao Vivo 24h | Brasil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/CNN_Brasil_logo.svg/200px-CNN_Brasil_logo.svg.png', url:'https://cnnbrasil.com.br/ao-vivo/' },
+  { id:-9,  name:'BandNews TV',    group:'📡 Ao Vivo 24h | Brasil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/BandNews_TV_logo.svg/200px-BandNews_TV_logo.svg.png', url:'https://band.uol.com.br/ao-vivo/bandnews-tv' },
+  { id:-10, name:'TV Escola',      group:'📡 Ao Vivo 24h | Brasil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Logo_TV_Escola.svg/200px-Logo_TV_Escola.svg.png', url:'https://tvescola.org.br/ao-vivo/' },
+
+  // ── NOTÍCIAS INTERNACIONAIS ──────────
+  { id:-20, name:'Al Jazeera English',  group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Al_Jazeera_English_logo.svg/200px-Al_Jazeera_English_logo.svg.png', url:'https://live-hls-web-aje.getaj.net/AJE/index.m3u8' },
+  { id:-21, name:'France 24 English',   group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/France_24_logo.svg/200px-France_24_logo.svg.png', url:'https://stream.france24.com/hls/live/2037201/F24_EN_LO_HLS/master.m3u8' },
+  { id:-22, name:'France 24 Français',  group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/France_24_logo.svg/200px-France_24_logo.svg.png', url:'https://stream.france24.com/hls/live/2037200/F24_FR_LO_HLS/master.m3u8' },
+  { id:-23, name:'DW English',          group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Deutsche_Welle_symbol_2012.svg/200px-Deutsche_Welle_symbol_2012.svg.png', url:'https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8' },
+  { id:-24, name:'DW Deutsch',          group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Deutsche_Welle_symbol_2012.svg/200px-Deutsche_Welle_symbol_2012.svg.png', url:'https://dwamdstream104.akamaized.net/hls/live/2015531/dwstream104/index.m3u8' },
+  { id:-25, name:'Euronews English',    group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Euronews_logo.svg/200px-Euronews_logo.svg.png', url:'https://rakuten-euronews-1-it.samsung.wurl.com/manifest/playlist.m3u8' },
+  { id:-26, name:'TRT World',           group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/TRT_World_Logo.svg/200px-TRT_World_Logo.svg.png', url:'https://tv-trtworld.live.trt.com.tr/master.m3u8' },
+  { id:-27, name:'Sky News',            group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Sky_News_logo_2020.svg/200px-Sky_News_logo_2020.svg.png', url:'https://skynews-i.akamaihd.net/hls/live/256027/skynews/mobile1/master.m3u8' },
+  { id:-28, name:'CNN International',   group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/CNN_International_logo.svg/200px-CNN_International_logo.svg.png', url:'https://turner-cnninternational-1-eu.samsung.wurl.com/manifest/playlist.m3u8' },
+  { id:-29, name:'Bloomberg TV',        group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Bloomberg_television_logo.svg/200px-Bloomberg_television_logo.svg.png', url:'https://bloomberg-bloomberg-1-us.samsung.wurl.com/manifest/playlist.m3u8' },
+  { id:-30, name:'CGTN English',        group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/CGTN_logo_%282016%29.svg/200px-CGTN_logo_%282016%29.svg.png', url:'https://news.cgtn.com/resource/live/english/cgtn-news.m3u8' },
+  { id:-31, name:'RT News',             group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/RT_logo.svg/200px-RT_logo.svg.png', url:'https://rt-global.rttv.com/live/rtnews/playlist.m3u8' },
+  { id:-32, name:'NHK World Japan',     group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/NHK_World_logo.svg/200px-NHK_World_logo.svg.png', url:'https://nhkwlive-ojp.akamaized.net/hls/live/2003458/nhkwlive-ojp-en/index.m3u8' },
+  { id:-33, name:'i24 News English',    group:'📡 Ao Vivo 24h | Notícias', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/I24news_logo.svg/200px-I24news_logo.svg.png', url:'https://bcovlive-a.akamaihd.net/59c0f63e14a94a5c8f06bb68e78cde39/eu-central-1/5377161796001/profile_0/chunklist.m3u8' },
+
+  // ── FILMES ───────────────────────────
+  { id:-40, name:'Pluto TV Movies',       group:'📡 Ao Vivo 24h | Filmes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/62267ed2be06460007a4d83d/master.m3u8' },
+  { id:-41, name:'Pluto TV Thrillers',    group:'📡 Ao Vivo 24h | Filmes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/62267ebe8809810007d24ab5/master.m3u8' },
+  { id:-42, name:'Pluto TV Action',       group:'📡 Ao Vivo 24h | Filmes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5cf0e4b1d5b440dcc4db3e5c/master.m3u8' },
+  { id:-43, name:'Pluto TV Horror',       group:'📡 Ao Vivo 24h | Filmes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5cf0e4b1d5b440dcc4db3e5b/master.m3u8' },
+  { id:-44, name:'Pluto TV Romance',      group:'📡 Ao Vivo 24h | Filmes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5cf0e4b1d5b440dcc4db3e60/master.m3u8' },
+  { id:-45, name:'Pluto TV Comedy',       group:'📡 Ao Vivo 24h | Filmes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5cf0e4b1d5b440dcc4db3e57/master.m3u8' },
+  { id:-46, name:'Tubi Classic Movies',   group:'📡 Ao Vivo 24h | Filmes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Tubi_logo.svg/200px-Tubi_logo.svg.png', url:'https://linear-56.frequency.stream/d/linear/56/65de03c72e19c3000c0f6e9f/master.m3u8' },
+
+  // ── SÉRIES ───────────────────────────
+  { id:-50, name:'Pluto TV Crime Drama',  group:'📡 Ao Vivo 24h | Séries', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5cf0e4b1d5b440dcc4db3e5e/master.m3u8' },
+  { id:-51, name:'Pluto TV Drama',        group:'📡 Ao Vivo 24h | Séries', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5cf0e4b1d5b440dcc4db3e59/master.m3u8' },
+  { id:-52, name:'Pluto TV Reality',      group:'📡 Ao Vivo 24h | Séries', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5e9d6b8bb8734a0008f67c4e/master.m3u8' },
+
+  // ── INFANTIL ─────────────────────────
+  { id:-60, name:'Pluto TV Kids',         group:'📡 Ao Vivo 24h | Infantil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5cf0e4b1d5b440dcc4db3e5f/master.m3u8' },
+  { id:-61, name:'Looney Tunes 24h',      group:'📡 Ao Vivo 24h | Infantil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Looney_Tunes_logo.svg/200px-Looney_Tunes_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5cf0e4b1d5b440dcc4db3e5a/master.m3u8' },
+  { id:-62, name:'Baby TV',               group:'📡 Ao Vivo 24h | Infantil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Baby_TV_logo.svg/200px-Baby_TV_logo.svg.png', url:'https://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5f3de6e5a583e2787ec4b1cc/master.m3u8' },
+  { id:-63, name:'Kiddie Network',        group:'📡 Ao Vivo 24h | Infantil', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5e9d6b72b8734a0008f66c1e/master.m3u8' },
+
+  // ── DOCUMENTÁRIOS ────────────────────
+  { id:-70, name:'Pluto TV Documentaries', group:'📡 Ao Vivo 24h | Documentários', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5cf4fc4e6ea56d20a0f5d8fb/master.m3u8' },
+  { id:-71, name:'Science & Nature',      group:'📡 Ao Vivo 24h | Documentários', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5f3f9a4da1b1b3001ac7fcae/master.m3u8' },
+  { id:-72, name:'NASA TV',               group:'📡 Ao Vivo 24h | Ciência', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/200px-NASA_logo.svg.png', url:'https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8' },
+  { id:-73, name:'History Channel 24h',   group:'📡 Ao Vivo 24h | Documentários', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/History_logo_2021.svg/200px-History_logo_2021.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5e9d6b5eb8734a0008f65e56/master.m3u8' },
+  { id:-74, name:'Pluto TV True Crime',   group:'📡 Ao Vivo 24h | Documentários', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5e9d6b82b8734a0008f66bee/master.m3u8' },
+
+  // ── ESPORTES ─────────────────────────
+  { id:-80, name:'Eurosport 24h',         group:'📡 Ao Vivo 24h | Esportes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Eurosport_logo_2015.svg/200px-Eurosport_logo_2015.svg.png', url:'https://eurosport-pull-live.eurosport.com/all/eurosport1/low/playlist.m3u8' },
+  { id:-81, name:'Stadium Sports 24/7',   group:'📡 Ao Vivo 24h | Esportes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Stadium_network_logo.png/200px-Stadium_network_logo.png', url:'https://stadiumsportslive.cdnmedia.tv/live/stadium/playlist.m3u8' },
+  { id:-82, name:'Red Bull TV',           group:'📡 Ao Vivo 24h | Esportes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Red_Bull_TV_logo.svg/200px-Red_Bull_TV_logo.svg.png', url:'https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8' },
+  { id:-83, name:'Pluto TV Sports',       group:'📡 Ao Vivo 24h | Esportes', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5e9d6b91b8734a0008f66e36/master.m3u8' },
+
+  // ── MÚSICA ───────────────────────────
+  { id:-90, name:'Lofi Hip Hop Radio',    group:'📡 Ao Vivo 24h | Música', logo:'https://i.imgur.com/7bDqUal.png', url:'https://www.youtube.com/watch?v=jfKfPfyJRdk' },
+  { id:-91, name:'Jazz 24',               group:'📡 Ao Vivo 24h | Música', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Jazz_24_logo.svg/200px-Jazz_24_logo.svg.png', url:'https://n3fa.net/listen/jazz24/jazz24.stream/playlist.m3u8' },
+  { id:-92, name:'MTV Pluto',             group:'📡 Ao Vivo 24h | Música', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MTV_2021_logo.svg/200px-MTV_2021_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5f3de9f0a583e2787ec4b2f4/master.m3u8' },
+  { id:-93, name:'Hits Music 24h',        group:'📡 Ao Vivo 24h | Música', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pluto_TV_logo.svg/200px-Pluto_TV_logo.svg.png', url:'https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5cf0e4b1d5b440dcc4db3e58/master.m3u8' },
+];
+
+// ═══════════════════════════════════════
+// ESTADO
+// ═══════════════════════════════════════
+let ALL = [];
+let VIEW = [];
+let PAGE_IDX = 0;
+let CUR = null;
+let RETRY = 0, RETRY_MAX = 5;
+let RETRY_TMR = null, RETRY_IV = null;
+let TAB = 'all';
+let SIDEBAR_OPEN = true;
+let BLOCKED = 0;
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+window.addEventListener('DOMContentLoaded', init);
+function init() {
+  animBar();
+  const cached = loadCache();
+  if (cached) {
+    setLS('Usando cache local...');
+    ALL = mergeLive24(cached);
+    finishLoad();
+  } else {
+    fetchM3U();
+  }
+}
+
+// Garante que LIVE_24H sempre está no início de ALL
+function mergeLive24(m3uChannels) {
+  // Remove duplicatas de LIVE_24H que possam estar no cache
+  const filtered = m3uChannels.filter(c => c.id >= 0);
+  return [...LIVE_24H, ...filtered];
+}
+
+// ═══════════════════════════════════════
+// CACHE
+// ═══════════════════════════════════════
+function loadCache() {
+  try {
+    const ts = parseInt(localStorage.getItem(CACHE_TS_KEY) || '0');
+    if (Date.now() - ts > CACHE_TTL) return null;
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const arr = JSON.parse(raw);
+    return arr && arr.length ? arr : null;
+  } catch(e) { return null; }
+}
+
+function saveCache(arr) {
+  try {
+    // Salva apenas canais da M3U (sem os 24h, pois sempre carregamos do código)
+    const m3uOnly = arr.filter(c => c.id >= 0);
+    localStorage.setItem(CACHE_KEY, JSON.stringify(m3uOnly));
+    localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+  } catch(e) {
+    localStorage.clear();
+    try {
+      const m3uOnly = arr.filter(c => c.id >= 0).slice(0, 4000);
+      localStorage.setItem(CACHE_KEY, JSON.stringify(m3uOnly));
+      localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+    } catch(e2) {}
+  }
+}
+
+// ═══════════════════════════════════════
+// FETCH M3U
+// ═══════════════════════════════════════
+async function fetchM3U() {
+  setLS('Conectando...');
+  let text = null;
+
+  for (let i = 0; i < PROXIES.length; i++) {
+    try {
+      setLS(`Proxy ${i+1}/${PROXIES.length}...`);
+      setBar((i+1) * 15);
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 20000);
+      const res = await fetch(PROXIES[i](M3U_URL), { signal: ctrl.signal });
+      clearTimeout(tid);
+      if (res.ok) {
+        text = await res.text();
+        if (text && text.includes('#EXTINF')) break;
+        text = null;
+      }
+    } catch(e) {}
+  }
+
+  if (!text) {
+    try {
+      setLS('Conexão direta...');
+      const ctrl = new AbortController();
+      setTimeout(() => ctrl.abort(), 15000);
+      const res = await fetch(M3U_URL, { signal: ctrl.signal });
+      if (res.ok) text = await res.text();
+    } catch(e) {}
+  }
+
+  if (!text || !text.includes('#EXTINF')) {
+    showFallback();
+    return;
+  }
+
+  setLS('Processando canais...');
+  setBar(60);
+  setTimeout(() => parseM3U(text), 10);
+}
+
+// ═══════════════════════════════════════
+// PARSE M3U — LIVE_24H sempre no início
+// ═══════════════════════════════════════
+function parseM3U(text) {
+  const lines = text.split('\n');
+  const m3uChannels = [];
+  let cur = null;
+  let blocked = 0;
+  let total = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+
+    if (line.startsWith('#EXTINF')) {
+      total++;
+      const ci = line.lastIndexOf(',');
+      const name = ci >= 0 ? line.slice(ci+1).trim() : 'Canal ' + total;
+      const group = attr(line, 'group-title') || 'Geral';
+      const logo = attr(line, 'tvg-logo') || '';
+      cur = { id: total, name, group, logo };
+    } else if (!line.startsWith('#') && cur) {
+      cur.url = line.trim();
+      if (isAdult(cur)) { blocked++; cur = null; continue; }
+      m3uChannels.push(cur);
+      cur = null;
+    }
+
+    if (total % 10000 === 0 && total > 0) {
+      setBar(Math.min(60 + (i / lines.length) * 35, 95));
+      setLS(`Processando... ${total.toLocaleString('pt-BR')} canais`);
+      document.getElementById('lcnt').textContent = `Bloqueados: ${blocked}`;
+    }
+  }
+
+  BLOCKED = blocked;
+  // ✅ LIVE_24H no início + canais da M3U
+  ALL = [...LIVE_24H, ...m3uChannels];
+  saveCache(ALL);
+  setBar(100);
+  setTimeout(finishLoad, 300);
+}
+
+function attr(line, name) {
+  const r = new RegExp(name + '=["\']([^"\']*)["\']', 'i');
+  const m = line.match(r);
+  return m ? m[1].trim() : '';
+}
+
+function isAdult(ch) {
+  const g = ch.group || '';
+  if (ADULT_GROUPS.some(ag => g === ag)) return true;
+  const str = (ch.name + ' ' + g).toLowerCase();
+  return ADULT_KW.some(k => str.includes(k));
+}
+
+// ═══════════════════════════════════════
+// CLASSIFICAÇÃO
+// ═══════════════════════════════════════
+function isLive24(ch) { return ch.id < 0; }
+function isMovie(ch)  { return !isLive24(ch) && ch.group.toLowerCase().startsWith('filme'); }
+function isSeries(ch) { return !isLive24(ch) && (ch.group.toUpperCase().startsWith('SÉRIES') || ch.group.toUpperCase().startsWith('SERIES')); }
+function isAnime(ch)  { const g = ch.group.toUpperCase(); return !isLive24(ch) && (g.includes('ANIME') || g.includes('ANIMAÇÃO') || g.includes('ANIMACAO')); }
+function isKids(ch)   { const g = ch.group.toLowerCase(); return !isLive24(ch) && (g.includes('infantil') || g.includes('desenho') || g.includes('kids') || g.includes('criança')); }
+function isSport(ch)  { const g = ch.group.toLowerCase(); return !isLive24(ch) && (g.includes('esporte') || g.includes('sport') || g.includes('futebol') || g.includes('nba') || g.includes('premiere') || g.includes('sportv') || g.includes('libertadores')); }
+function isTV(ch)     { return !isLive24(ch) && !isMovie(ch) && !isSeries(ch); }
+
+// ═══════════════════════════════════════
+// FINISH LOAD
+// ═══════════════════════════════════════
+function finishLoad() {
+  document.getElementById('ls').style.display = 'none';
+  document.getElementById('hero').style.display = 'flex';
+  updateStats();
+  buildCatList();
+  switchTab('all', document.getElementById('nav-all'));
+  toast('✅ ' + ALL.length.toLocaleString('pt-BR') + ' canais + ' + LIVE_24H.length + ' ao vivo 24h!', 'ok');
+}
+
+function updateStats() {
+  const live24  = ALL.filter(isLive24).length;
+  const movies  = ALL.filter(isMovie).length;
+  const series  = ALL.filter(isSeries).length;
+  const tv      = ALL.filter(isTV).length;
+  document.getElementById('sv-total').textContent   = fmt(ALL.length);
+  document.getElementById('sv-live24').textContent  = fmt(live24);
+  document.getElementById('sv-tv').textContent      = fmt(tv);
+  document.getElementById('sv-movies').textContent  = fmt(movies);
+  document.getElementById('sv-series').textContent  = fmt(series);
+  document.getElementById('sv-blocked').textContent = fmt(BLOCKED);
+  document.getElementById('c-all').textContent      = fmt(ALL.length);
+  document.getElementById('c-live24').textContent   = fmt(live24);
+  document.getElementById('c-tv').textContent       = fmt(tv);
+  document.getElementById('c-movies').textContent   = fmt(movies);
+  document.getElementById('c-series').textContent   = fmt(series);
+  document.getElementById('c-anime').textContent    = fmt(ALL.filter(isAnime).length);
+  document.getElementById('c-kids').textContent     = fmt(ALL.filter(isKids).length);
+  document.getElementById('c-sport').textContent    = fmt(ALL.filter(isSport).length);
+}
+
+function fmt(n) { return n >= 1000 ? (n/1000).toFixed(1)+'k' : String(n); }
+
+function buildCatList() {
+  const groups = {};
+  ALL.forEach(ch => { groups[ch.group] = (groups[ch.group]||0)+1; });
+  const sorted = Object.entries(groups).sort((a,b)=>b[1]-a[1]).slice(0,40);
+  document.getElementById('catList').innerHTML = sorted.map(([g,cnt]) =>
+    `<div class="sb-item" onclick="filterGroup(${JSON.stringify(g)},this)">📂 <span>${esc(g)}</span><span class="cnt">${fmt(cnt)}</span></div>`
+  ).join('');
+}
+
+// ═══════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════
+function switchTab(tab, el) {
+  TAB = tab;
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const fn = {
+    all:    () => ALL,
+    live24: () => ALL.filter(isLive24),
+    tv:     () => ALL.filter(isTV),
+    movies: () => ALL.filter(isMovie),
+    series: () => ALL.filter(isSeries),
+    anime:  () => ALL.filter(isAnime),
+    kids:   () => ALL.filter(isKids),
+    sport:  () => ALL.filter(isSport),
+  };
+  VIEW = (fn[tab] || fn.all)();
+  PAGE_IDX = 0;
+  const titles = {all:'🏠 Todos',live24:'🔴 Ao Vivo 24h',tv:'📺 TV ao Vivo',movies:'🎬 Filmes',series:'🎭 Séries',anime:'⚡ Animes',kids:'🧸 Infantil',sport:'⚽ Esportes'};
+  renderView(titles[tab] || tab);
+}
+
+function filterGroup(grp, el) {
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  VIEW = ALL.filter(ch=>ch.group===grp);
+  PAGE_IDX = 0;
+  renderView('📂 ' + grp);
+}
+
+function doSearch(q) {
+  q = q.trim().toLowerCase();
+  if (!q) { switchTab(TAB, document.getElementById('nav-'+TAB)); return; }
+  VIEW = ALL.filter(ch => ch.name.toLowerCase().includes(q) || ch.group.toLowerCase().includes(q));
+  PAGE_IDX = 0;
+  renderView(`🔍 "${q}"`);
+}
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+function renderView(title) {
+  const area = document.getElementById('content');
+  if (!VIEW.length) {
+    area.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:44px">😔</div><div style="margin-top:10px">Nenhum resultado</div></div>`;
+    document.getElementById('loadMoreWrap').style.display = 'none';
+    return;
+  }
+  const slice = VIEW.slice(0, PAGE_SIZE);
+  area.innerHTML = `
+    <div class="section-hdr">${title} <span>${VIEW.length.toLocaleString('pt-BR')} itens</span></div>
+    <div class="grid" id="grid">${slice.map(card).join('')}</div>
+  `;
+  PAGE_IDX = 1;
+  document.getElementById('loadMoreWrap').style.display = VIEW.length > PAGE_SIZE ? 'flex' : 'none';
+  if (VIEW.length > PAGE_SIZE) {
+    document.getElementById('loadMoreBtn').textContent = `⬇️ Carregar mais (${VIEW.length - slice.length} restantes)`;
+  }
+}
+
+function loadMoreCards() {
+  const start = PAGE_IDX * PAGE_SIZE;
+  const slice = VIEW.slice(start, start + PAGE_SIZE);
+  document.getElementById('grid').insertAdjacentHTML('beforeend', slice.map(card).join(''));
+  PAGE_IDX++;
+  const remaining = VIEW.length - PAGE_IDX * PAGE_SIZE;
+  if (remaining <= 0) document.getElementById('loadMoreWrap').style.display = 'none';
+  else document.getElementById('loadMoreBtn').textContent = `⬇️ Carregar mais (${remaining} restantes)`;
+}
+
+function card(ch) {
+  const live = isLive24(ch);
+  const icon = live ? '📡' : isMovie(ch) ? '🎬' : isSeries(ch) ? '🎭' : isAnime(ch) ? '⚡' : isKids(ch) ? '🧸' : isSport(ch) ? '⚽' : '📺';
+  const badgeCls = live ? 'ch-badge live' : 'ch-badge';
+  const badgeTxt = live ? '🔴 AO VIVO' : icon;
+  const cardCls = live ? 'ch-card live-card' : 'ch-card';
+  const thumb = ch.logo
+    ? `<img src="${esc(ch.logo)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="icon" style="display:none">${icon}</span>`
+    : `<span class="icon">${icon}</span>`;
+  return `<div class="${cardCls}" onclick="play(${ch.id})">
+    <div class="ch-thumb">${thumb}<span class="${badgeCls}">${badgeTxt}</span></div>
+    <div class="ch-info">
+      <div class="ch-name" title="${esc(ch.name)}">${esc(ch.name)}</div>
+      <div class="ch-grp">${esc(ch.group)}</div>
+    </div>
+  </div>`;
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+// ═══════════════════════════════════════
+// PLAYER
+// ═══════════════════════════════════════
+function play(id) {
+  CUR = ALL.find(c=>c.id===id);
+  if (!CUR) return;
+  RETRY = 0;
+  document.getElementById('ov').classList.add('open');
+  document.getElementById('ptitle').textContent = CUR.name + ' — ' + CUR.group;
+  document.getElementById('pstat').textContent = '⏳ Conectando...';
+  document.getElementById('pretry').textContent = '';
+  hideErr();
+  loadStream(CUR.url);
+}
+
+function loadStream(url) {
+  const v = document.getElementById('vid');
+  v.pause(); v.src = ''; v.load();
+  v.src = url; v.load();
+  v.play().then(()=>{ document.getElementById('pstat').textContent='▶️ Reproduzindo'; RETRY=0; }).catch(()=>{});
+}
+
+const vid = document.getElementById('vid');
+vid.addEventListener('playing', ()=>{ hideErr(); document.getElementById('pstat').textContent='▶️ Reproduzindo'; RETRY=0; document.getElementById('pretry').textContent=''; });
+vid.addEventListener('waiting', ()=>{ document.getElementById('pstat').textContent='⏳ Buffering...'; });
+vid.addEventListener('error',   ()=>{ if(CUR) autoRetry(); });
+vid.addEventListener('stalled', ()=>{ if(CUR) setTimeout(()=>{ if(vid.readyState<3) autoRetry(); },8000); });
+
+function autoRetry() {
+  clearTimeout(RETRY_TMR); clearInterval(RETRY_IV);
+  RETRY++;
+  if (RETRY > RETRY_MAX) { showErr('Falha após '+RETRY_MAX+' tentativas. Use VLC ou MX Player.'); document.getElementById('pstat').textContent='❌ Erro'; return; }
+  const delay = Math.min(1500*RETRY,7000);
+  document.getElementById('pretry').textContent = `Tentativa ${RETRY}/${RETRY_MAX}`;
+  showErr(`Reconectando... (${RETRY}/${RETRY_MAX})`);
+  document.getElementById('pstat').textContent = '🔄 Reconectando...';
+  let p = 0; document.getElementById('rfill').style.width='0%';
+  RETRY_IV = setInterval(()=>{ p+=100/(delay/100); document.getElementById('rfill').style.width=Math.min(p,100)+'%'; if(p>=100)clearInterval(RETRY_IV); },100);
+  RETRY_TMR = setTimeout(()=>{ hideErr(); if(CUR) loadStream(CUR.url); }, delay);
+}
+
+function manualRetry() { RETRY=0; hideErr(); if(CUR) loadStream(CUR.url); }
+function showErr(msg) { document.getElementById('perr').classList.add('show'); document.getElementById('perrmsg').textContent=msg; }
+function hideErr()    { document.getElementById('perr').classList.remove('show'); document.getElementById('rfill').style.width='0%'; }
+
+function closePlayer() {
+  document.getElementById('ov').classList.remove('open');
+  clearTimeout(RETRY_TMR); clearInterval(RETRY_IV);
+  vid.pause(); vid.src=''; CUR=null; RETRY=0;
+}
+function bgClose(e) { if(e.target===document.getElementById('ov')) closePlayer(); }
+
+function getURL() { return CUR ? CUR.url : ''; }
+function openVLC()  { const u=getURL(); if(!u)return; window.location.href='vlc://'+u; setTimeout(()=>toast('🎞️ Abrindo VLC...','ok'),300); }
+function openMX()   { const u=getURL(); if(!u)return; window.location.href=`intent:${u}#Intent;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`; setTimeout(()=>toast('▶️ Abrindo MX Player...','ok'),300); }
+function openKodi() { const u=getURL(); if(!u)return; window.location.href='kodi://open?url='+encodeURIComponent(u); toast('🎮 Abrindo Kodi...','ok'); }
+function openPot()  { const u=getURL(); if(!u)return; window.location.href='potplayer://'+u; toast('🎬 Abrindo PotPlayer...','ok'); }
+function copyURL()  { const u=getURL(); if(!u)return; navigator.clipboard.writeText(u).then(()=>toast('📋 URL copiada!','ok')).catch(()=>prompt('URL do stream:',u)); }
+
+function toggleSidebar() {
+  SIDEBAR_OPEN = !SIDEBAR_OPEN;
+  document.getElementById('sidebar').classList.toggle('hidden', !SIDEBAR_OPEN);
+}
+
+function reloadAll() {
+  localStorage.removeItem(CACHE_KEY);
+  localStorage.removeItem(CACHE_TS_KEY);
+  ALL=[]; VIEW=[]; BLOCKED=0; PAGE_IDX=0;
+  document.getElementById('ls').style.display='flex';
+  document.getElementById('lbar').style.width='0%';
+  document.getElementById('hero').style.display='none';
+  document.getElementById('content').innerHTML='';
+  animBar(); fetchM3U();
+}
+
+function showFallback() {
+  document.getElementById('ls').style.display='none';
+  document.getElementById('hero').style.display='flex';
+  // Mesmo sem M3U, carrega os 24h
+  ALL = [...LIVE_24H]; VIEW = [...LIVE_24H];
+  updateStats();
+  document.getElementById('hero').querySelector('p').textContent='⚠️ Lista M3U indisponível (CORS). Exibindo canais 24h gratuitos!';
+  switchTab('live24', document.getElementById('nav-live24'));
+  toast('⚠️ Usando canais gratuitos 24h no modo offline','warn');
+}
+function openListVLC()  { window.location.href='vlc://'+M3U_URL; }
+function openListMX()   { window.location.href=`intent:${M3U_URL}#Intent;package=com.mxtech.videoplayer.ad;action=android.intent.action.VIEW;end`; }
+function copyListURL()  { navigator.clipboard.writeText(M3U_URL).then(()=>toast('📋 URL copiada!','ok')); }
+
+function setLS(t) { const el=document.getElementById('lsub'); if(el) el.textContent=t; }
+function setBar(p) { const el=document.getElementById('lbar'); if(el) el.style.width=p+'%'; }
+let barIV;
+function animBar() { let p=0; clearInterval(barIV); barIV=setInterval(()=>{ p+=Math.random()*5; if(p>88){clearInterval(barIV);p=88;} setBar(p); },350); }
+
+function toast(msg, type='') {
+  const c=document.getElementById('toasts');
+  const t=document.createElement('div');
+  t.className='toast '+(type||''); t.textContent=msg; c.appendChild(t);
+  setTimeout(()=>t.remove(), 3500);
+}
+</script>
+</body>
+</html>

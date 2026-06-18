@@ -1,0 +1,13 @@
+{
+  "appId": "com.iptvpro.player",
+  "appName": "IPTV Pro Player",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  }
+}
